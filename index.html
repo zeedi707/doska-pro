@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Доска Про</title>
+
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Доска Про">
 <link rel="apple-touch-icon" href="icon.png">
-<title>Доска Про</title>
 
 <style>
 
@@ -20,7 +22,7 @@ text-align:center;
 }
 
 h1{
-font-size:42px;
+font-size:40px;
 margin-bottom:30px;
 }
 
@@ -44,21 +46,10 @@ input,select{
 width:100%;
 border:none;
 border-bottom:1px solid #ccc;
-padding:8px;
-font-size:16px;
-outline:none;
-margin-bottom:10px;
-}
-
-button{
-margin-top:30px;
-padding:15px 40px;
+padding:10px;
 font-size:18px;
-border:none;
-border-radius:30px;
-background:linear-gradient(90deg,#18a558,#1fb6ff);
-color:white;
-cursor:pointer;
+outline:none;
+margin-bottom:12px;
 }
 
 .resultsWrapper{
@@ -119,7 +110,7 @@ text-align:left;
 text-align:right;
 }
 
-/* 📱 Адаптация для телефона */
+/* мобильная версия */
 
 @media (max-width:700px){
 
@@ -146,10 +137,6 @@ grid-template-columns:1fr;
 grid-column:span 1;
 }
 
-button{
-width:90%;
-}
-
 }
 
 </style>
@@ -162,44 +149,51 @@ width:90%;
 <div class="container">
 
 <div class="card">
+
 <label>Ширина (мм)</label>
-<input id="width" type="number" inputmode="decimal" value="96">
+<input id="width" type="text" inputmode="decimal" pattern="[0-9]*" value="96">
 
 <label>Толщина (мм)</label>
-<input id="thickness" type="number" inputmode="decimal" value="15">
+<input id="thickness" type="text" inputmode="decimal" pattern="[0-9]*" value="15">
 
 <label>Длина (мм)</label>
-<input id="length" type="number" inputmode="decimal">
+<input id="length" type="text" inputmode="decimal" pattern="[0-9]*">
+
 </div>
 
 <div class="card">
+
 <label>Сорт</label>
+
 <select id="grade">
 <option value="Экстра">Сорт Экстра</option>
 <option value="A">Сорт A</option>
 <option value="B">Сорт B</option>
 </select>
+
 </div>
 
 <div class="card">
+
 <label>Сколько м² нужно</label>
-<input id="neededM2" type="number" inputmode="decimal">
+<input id="neededM2" type="text" inputmode="decimal" pattern="[0-9]*">
 
 <label>или сколько досок</label>
-<input id="neededBoards" type="number" inputmode="decimal">
+<input id="neededBoards" type="text" inputmode="decimal" pattern="[0-9]*">
+
 </div>
 
 <div class="card">
+
 <label>Цена за 1 м²</label>
-<input id="priceM2" type="number" inputmode="decimal">
+<input id="priceM2" type="text" inputmode="decimal" pattern="[0-9]*">
 
 <label>или цена за 1 доску</label>
-<input id="priceBoard" type="number" inputmode="decimal">
-</div>
+<input id="priceBoard" type="text" inputmode="decimal" pattern="[0-9]*">
 
 </div>
 
-<button onclick="calculate()">Рассчитать</button>
+</div>
 
 <div class="resultsWrapper">
 
@@ -276,6 +270,7 @@ width:90%;
 function format(num,d=2){
 return Number(num).toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d})
 }
+
 function calculate(){
 
 let w=parseFloat(document.getElementById("width").value)||0
@@ -340,6 +335,12 @@ if(grade==="B"){gradeCard.classList.add("orange")}
 if(grade==="Экстра"){gradeCard.classList.add("purple")}
 
 }
+
+document.querySelectorAll("input").forEach(input=>{
+input.addEventListener("input",calculate)
+})
+
+document.querySelector("select").addEventListener("change",calculate)
 
 </script>
 
