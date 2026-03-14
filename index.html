@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Доска Про</title>
 
 <style>
@@ -10,7 +11,7 @@ body{
 font-family:Arial;
 background:#eef1f4;
 margin:0;
-padding:40px;
+padding:20px;
 text-align:center;
 }
 
@@ -28,7 +29,7 @@ flex-wrap:wrap;
 
 .card{
 background:white;
-padding:25px;
+padding:20px;
 border-radius:18px;
 box-shadow:0 10px 25px rgba(0,0,0,0.1);
 width:220px;
@@ -85,7 +86,7 @@ box-shadow:0 10px 20px rgba(0,0,0,0.1);
 }
 
 .big{
-font-size:34px;
+font-size:28px;
 font-weight:bold;
 margin-top:10px;
 }
@@ -114,14 +115,45 @@ text-align:left;
 text-align:right;
 }
 
+/* 📱 Адаптация для телефона */
+
+@media (max-width:700px){
+
+h1{
+font-size:28px;
+}
+
+.container{
+flex-direction:column;
+align-items:center;
+}
+
+.card{
+width:90%;
+}
+
+.leftResults,
+.rightResults{
+width:100%;
+grid-template-columns:1fr;
+}
+
+.total{
+grid-column:span 1;
+}
+
+button{
+width:90%;
+}
+
+}
+
 </style>
 </head>
 
 <body>
 
 <h1>Доска Про 🌿</h1>
-
-<form id="form">
 
 <div class="container">
 
@@ -133,7 +165,7 @@ text-align:right;
 <input id="thickness" value="15">
 
 <label>Длина (мм)</label>
-<input id="length" value="">
+<input id="length">
 </div>
 
 <div class="card">
@@ -147,7 +179,7 @@ text-align:right;
 
 <div class="card">
 <label>Сколько м² нужно</label>
-<input id="neededM2" value="">
+<input id="neededM2">
 
 <label>или сколько досок</label>
 <input id="neededBoards">
@@ -155,7 +187,7 @@ text-align:right;
 
 <div class="card">
 <label>Цена за 1 м²</label>
-<input id="priceM2" value="">
+<input id="priceM2">
 
 <label>или цена за 1 доску</label>
 <input id="priceBoard">
@@ -163,9 +195,7 @@ text-align:right;
 
 </div>
 
-<button type="submit">Рассчитать</button>
-
-</form>
+<button onclick="calculate()">Рассчитать</button>
 
 <div class="resultsWrapper">
 
@@ -242,10 +272,7 @@ text-align:right;
 function format(num,d=2){
 return Number(num).toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d})
 }
-
-document.getElementById("form").addEventListener("submit",function(e){
-
-e.preventDefault()
+function calculate(){
 
 let w=parseFloat(document.getElementById("width").value)||0
 let t=parseFloat(document.getElementById("thickness").value)||0
@@ -308,7 +335,7 @@ if(grade==="A"){gradeCard.classList.add("green")}
 if(grade==="B"){gradeCard.classList.add("orange")}
 if(grade==="Экстра"){gradeCard.classList.add("purple")}
 
-})
+}
 
 </script>
 
