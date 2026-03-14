@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Доска Про</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#eef1f4;
+margin:0;
+padding:40px;
+text-align:center;
+}
+
+h1{
+font-size:42px;
+margin-bottom:30px;
+}
+
+.container{
+display:flex;
+gap:20px;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+width:220px;
+text-align:left;
+}
+
+input,select{
+width:100%;
+border:none;
+border-bottom:1px solid #ccc;
+padding:8px;
+font-size:16px;
+outline:none;
+margin-bottom:10px;
+}
+
+button{
+margin-top:30px;
+padding:15px 40px;
+font-size:18px;
+border:none;
+border-radius:30px;
+background:linear-gradient(90deg,#18a558,#1fb6ff);
+color:white;
+cursor:pointer;
+}
+
+.resultsWrapper{
+margin-top:40px;
+display:flex;
+gap:40px;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.leftResults{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+width:420px;
+}
+
+.rightResults{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+width:420px;
+}
+
+.resultCard{
+padding:20px;
+border-radius:20px;
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
+}
+
+.big{
+font-size:34px;
+font-weight:bold;
+margin-top:10px;
+}
+
+.yellow{background:linear-gradient(135deg,#ffe07a,#ffd24d);}
+.green{background:linear-gradient(135deg,#b8e7c9,#8dd9b2);}
+.blue{background:linear-gradient(135deg,#b6e0f5,#8dc8e8);}
+.purple{background:linear-gradient(135deg,#a88cff,#7a5cff);}
+.orange{background:linear-gradient(135deg,#ffc98a,#ff9f40);}
+.gold{background:linear-gradient(135deg,#ffe08a,#d4a93a);}
+
+.total{
+grid-column:span 2;
+}
+
+.totalFlex{
+display:flex;
+justify-content:space-between;
+}
+
+.totalFlex div{
+text-align:left;
+}
+
+.totalFlex .right{
+text-align:right;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Доска Про 🌿</h1>
+
+<form id="form">
+
+<div class="container">
+
+<div class="card">
+<label>Ширина (мм)</label>
+<input id="width" value="96">
+
+<label>Толщина (мм)</label>
+<input id="thickness" value="15">
+
+<label>Длина (мм)</label>
+<input id="length" value="">
+</div>
+
+<div class="card">
+<label>Сорт</label>
+<select id="grade">
+<option value="Экстра">Сорт Экстра</option>
+<option value="A">Сорт A</option>
+<option value="B">Сорт B</option>
+</select>
+</div>
+
+<div class="card">
+<label>Сколько м² нужно</label>
+<input id="neededM2" value="">
+
+<label>или сколько досок</label>
+<input id="neededBoards">
+</div>
+
+<div class="card">
+<label>Цена за 1 м²</label>
+<input id="priceM2" value="">
+
+<label>или цена за 1 доску</label>
+<input id="priceBoard">
+</div>
+
+</div>
+
+<button type="submit">Рассчитать</button>
+
+</form>
+
+<div class="resultsWrapper">
+
+<div class="leftResults">
+
+<div class="resultCard yellow">
+Досок в 1 м²
+<div class="big" id="boardsM2">0</div>
+</div>
+
+<div class="resultCard yellow">
+Цена за 1 м²
+<div class="big" id="priceM2Result">0</div>
+</div>
+
+<div class="resultCard yellow">
+Цена за 1 доску
+<div class="big" id="priceBoardResult">0</div>
+</div>
+
+<div class="resultCard yellow">
+Всего досок
+<div class="big" id="boardsTotal">0</div>
+</div>
+
+<div class="resultCard gold total">
+
+<div class="totalFlex">
+
+<div>
+<div>Общая стоимость</div>
+<div class="big" id="total">0</div>
+</div>
+
+<div class="right">
+<div>Всего м²</div>
+<div class="big" id="totalM2">0</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="rightResults">
+
+<div class="resultCard green">
+Площадь доски
+<div class="big" id="area">0</div>
+</div>
+
+<div class="resultCard blue">
+Объем доски
+<div class="big" id="volume">0</div>
+</div>
+
+<div class="resultCard purple">
+Досок в м³
+<div class="big" id="boardsM3">0</div>
+</div>
+
+<div class="resultCard" id="gradeCard">
+Сорт доски
+<div class="big" id="gradeResult">A</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function format(num,d=2){
+return Number(num).toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d})
+}
+
+document.getElementById("form").addEventListener("submit",function(e){
+
+e.preventDefault()
+
+let w=parseFloat(document.getElementById("width").value)||0
+let t=parseFloat(document.getElementById("thickness").value)||0
+let l=parseFloat(document.getElementById("length").value)||0
+let neededM2=parseFloat(document.getElementById("neededM2").value)||0
+let neededBoards=parseFloat(document.getElementById("neededBoards").value)||0
+
+let priceM2=parseFloat(document.getElementById("priceM2").value)||0
+let priceBoard=parseFloat(document.getElementById("priceBoard").value)||0
+
+let area=(w*l)/1000000
+let volume=(w*l*t)/1000000000
+
+let boardsM2=area>0?1/area:0
+let boardsM3=volume>0?1/volume:0
+
+if(neededBoards>0){
+neededM2=neededBoards/boardsM2
+}else{
+neededBoards=boardsM2*neededM2
+}
+
+let boardPrice=0
+let m2price=0
+
+if(priceM2>0){
+m2price=priceM2
+boardPrice=priceM2*area
+}
+
+if(priceBoard>0){
+boardPrice=priceBoard
+m2price=priceBoard*boardsM2
+}
+
+let total=m2price*neededM2
+
+document.getElementById("area").innerHTML=area.toFixed(3)+" м²"
+document.getElementById("volume").innerHTML=volume.toFixed(4)+" м³"
+
+document.getElementById("boardsM2").innerHTML=format(boardsM2)
+document.getElementById("boardsM3").innerHTML=format(boardsM3)
+
+document.getElementById("boardsTotal").innerHTML=format(neededBoards)
+
+document.getElementById("priceM2Result").innerHTML=format(m2price)
+document.getElementById("priceBoardResult").innerHTML=format(boardPrice)
+
+document.getElementById("total").innerHTML=format(total)
+document.getElementById("totalM2").innerHTML=format(neededM2)
+
+let grade=document.getElementById("grade").value
+document.getElementById("gradeResult").innerHTML=grade
+
+let gradeCard=document.getElementById("gradeCard")
+
+gradeCard.classList.remove("green","orange","purple")
+
+if(grade==="A"){gradeCard.classList.add("green")}
+if(grade==="B"){gradeCard.classList.add("orange")}
+if(grade==="Экстра"){gradeCard.classList.add("purple")}
+
+})
+
+</script>
+
+</body>
+</html>
